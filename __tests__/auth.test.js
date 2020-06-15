@@ -3,10 +3,12 @@ const mongod = new MongoMemoryServer();
 const mongoose = require('mongoose');
 const connect = require('../lib/utils/connect');
 
+// const User = require('../lib/models/User');
+
 const request = require('supertest');
 const app = require('../lib/app');
 
-describe('auction routes', () => {
+describe('auth routes', () => {
   beforeAll(async() => {
     const uri = await mongod.getUri();
     return connect(uri);
@@ -19,5 +21,20 @@ describe('auction routes', () => {
   afterAll(async() => {
     await mongoose.connection.close();
     return mongod.stop();
+  });
+
+  it('creates a new user', () => {
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'steve@castiel.com',
+        password: 'salmondean'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          email: 'steve@castiel.com'
+        });
+      });
   });
 });
