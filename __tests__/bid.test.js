@@ -77,7 +77,7 @@ describe('bid routes', () => {
       });
   });
 
-  it('gets a bid by id', async() => {
+  it('gets a bid by id', () => {
 
     return request(app)
       .get(`/api/v1/bid/${bid._id}`)
@@ -94,5 +94,20 @@ describe('bid routes', () => {
           __v: 0
         });
       }); 
+  });
+
+  it('deletes a bid', () => {
+    request(app)
+      .delete(`/api/v1/bid/${bid._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          user: user.id,
+          auction: auction.id,
+          price: 205,
+          quantity: 1,
+          accepted: true
+        });
+      });
   });
 });
