@@ -76,4 +76,23 @@ describe('bid routes', () => {
         });
       });
   });
+
+  it('gets a bid by id', async() => {
+
+    return request(app)
+      .get(`/api/v1/bid/${bid._id}`)
+      .auth('steve@castiel.com', 'salmondean')
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          id: expect.anything(),
+          user: user.id,
+          auction: auction.id,
+          quantity: 1,
+          accepted: true,
+          price: 205,
+          __v: 0
+        });
+      }); 
+  });
 });
